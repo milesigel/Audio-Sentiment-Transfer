@@ -39,7 +39,7 @@ class Midi_to_Npy():
         """
         song_array = glob.glob(os.path.join(self.midi_path, "**/*.mid"), recursive=True)
         self.song_data = song_array
-        print("midi files have been loaded into array")
+        print("Midi files have been loaded into array.")
 
     def clean_midi(self):
         """
@@ -47,11 +47,13 @@ class Midi_to_Npy():
         """
         self.rolls = []
         for i, song in enumerate(self.song_data):
-            # create music 21 object
+            # CHANGE THE RESOLUTION DEPENDING ON MINIMUM ACCEPTABLE NOTE
+            # in this case I am using 16th notes as my resolution
             tracks = pypianoroll.read(song).set_resolution(16).binarize()
+            # blend combines all the different past into one part by summing up the two rolls
             single_track_roll = tracks.blend('sum')
             self.rolls.append([single_track_roll, song])
-        print("rolls have been saved!")
+        print("Rolls have been saved!")
 
     def split_roll(self):
         """
@@ -59,8 +61,9 @@ class Midi_to_Npy():
         """
         time = 64
         split = []
-        print("splitting dataset into array of snips")
+        print("Splitting dataset into array of snips")
         for roll, name in self.rolls:
+            # each song will be stored in a dictionary that contains the snips and name
             song = {"song": name, "snips": []}
             for i in range(len(roll) // time):
                 section = roll[i * time:(i + 1) * time, 24:108]
@@ -79,8 +82,7 @@ class Midi_to_Npy():
         csv = pd.read_csv(self.csv_path, usecols=fields)
         pieces = (list(csv.midi))
         pieces = [word.split("/")[-1] for word in pieces]
-        print(f"saving {len(self.splits)} into shorter sequences")
-        print()
+        print(f"Saving {len(self.splits)} into shorter sequences")
         os.makedirs(f"{self.new_dataset_path}/happy") if not os.path.isdir(f"{self.new_dataset_path}/happy") else None
         os.makedirs(f"{self.new_dataset_path}/sad") if not os.path.isdir(f"{self.new_dataset_path}/sad") else None
         for song in self.splits:
@@ -92,8 +94,10 @@ class Midi_to_Npy():
             positive = True if csv.iloc[index][6] == 1 else False
             for i in range(len(clips)):
                 if positive:
+                    # change 'happy' if there is a different name for label
                     np.save(f"{self.new_dataset_path}/happy/{name}_{i}", clips[i])
                 else:
+                    # this is other binary label. In this case sad.
                     np.save(f"{self.new_dataset_path}/sad/{name}_{i}", clips[i])
 
     def reduce(self, path, count, new_path="reduced"):
@@ -117,7 +121,7 @@ class Midi_to_Npy():
         first_files = glob.glob(os.path.join(first, "*.*"))
         second_files = glob.glob(os.path.join(second, "*.*"))
         assert len(first_files) == len(second_files)
-        print(f"joining directories in {new_path}")
+        print(f"Joining directories in {new_path}")
         for i in range(len(first_files)):
             shutil.copyfile(first_files[i], os.path.join(self.new_dataset_path, new_path, first_files[i].split("/")[-1]))
             shutil.copyfile(second_files[i], os.path.join(self.new_dataset_path, new_path, second_files[i].split("/")[-1]))
@@ -136,6 +140,14 @@ class Midi_to_Npy():
 
 
 if __name__ == '__main__':
+    """
+    This class will allow you to load in a midi dataset and convert it to npy arrays where the x-axis contains 
+    discrete time points, often in the form of note values (1/2 note, 1/4 note, 1/8 note, 1/16 note) and the y-axis
+    contains the different MIDI outputs.
+    
+    """
+
+
     MIDI_PATH = "/Users/milessigel/Desktop/PycharmProjects/Audio-Sentiment-Transfer/phrases"
     CSV_PATH = "/Users/milessigel/Desktop/PycharmProjects/Audio-Sentiment-Transfer/vgmidi_labelled.csv"
     NEW_PATH = "/Users/milessigel/Desktop/PycharmProjects/Audio-Sentiment-Transfer/new"
