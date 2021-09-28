@@ -1,9 +1,11 @@
 # Music-Sentiment-Transfer
 University of Rochester 2021 Summer REU focusing on music sentiment transfer using CycleGAN
 
-Poster: [Audio Sentiment Transfer poster.pdf](https://github.com/milesigel/Audio-Sentiment-Transfer/files/6888622/Audio.Sentiment.Transfer.poster.pdf)
+Poster: [Music Sentiment Transfer poster.pdf](https://github.com/milesigel/Audio-Sentiment-Transfer/files/7240114/Music.Sentiment.Transfer.poster.pdf)
 
-Paper: [Music_Sentiment_Transfer.pdf](https://github.com/milesigel/Audio-Sentiment-Transfer/files/7240107/Music_Sentiment_Transfer.pdf)
+Paper: [Music Sentiment Transfer.pdf](https://github.com/milesigel/Audio-Sentiment-Transfer/files/7240116/Music.Sentiment.Transfer.pdf)
+
+Slides: [Music Sentiment Transfer.pptx](https://github.com/milesigel/Audio-Sentiment-Transfer/files/7240117/Music.Sentiment.Transfer.pptx)
 
 For this project, we based our network on the CycleGAN framework for symbolic music created by Brunner et al. in thier paper [Symbolic Music Genre Transfer with CycleGAN](https://arxiv.org/pdf/1809.07575.pdf).
 
